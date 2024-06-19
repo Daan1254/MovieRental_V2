@@ -8,7 +8,7 @@ using MovieRental_V2.Shared.Models;
 namespace MovieRental_V2.Server.Controllers;
 
 [ApiController]
-// [Authorize]
+[Authorize]
 [Route("api/[controller]")]
 public class MovieController : ControllerBase
 {
