@@ -21,11 +21,6 @@ namespace MovieRental_V2.Client.Logic
                 if (response.IsSuccessStatusCode)
                 {
                     return true;
-                    // var result = await response.Content.ReadFromJsonAsync<LoginResult>();
-                    // if (result.Successful)
-                    // {
-                    //     return true;
-                    // }
                 }
             } 
             catch (AccessTokenNotAvailableException ex)
