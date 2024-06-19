@@ -1,9 +1,11 @@
 ﻿@page "/login"
 @using MovieRental_V2.Shared.Models
-@using MovieRental_V2.Client.Managers
+@using MovieRental_V2.Client.Logic
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @inject NavigationManager Navigation
 @inject AuthManager AuthManager
 <PageTitle>Login</PageTitle>
+@inject IAccessTokenProvider TokenProvider
 
 
 <div class="flex flex-col h-[80vh]">
@@ -26,7 +28,7 @@
             id="email"
             required=""
             type="email"
-            @bind="_loginModel.Email"
+            @bind="_loginRegisterModel.Email"
           />
         </div>
         <div class="space-y-2">
@@ -46,7 +48,7 @@
             id="password"
             required=""
             type="password"
-            @bind="_loginModel.Password"
+            @bind="_loginRegisterModel.Password"
           />
         </div>
         <button
@@ -62,19 +64,22 @@
 
 
 @code {
-  private LoginModel _loginModel = new LoginModel();
+  private LoginRegisterModel _loginRegisterModel = new LoginRegisterModel();
   
-  private void SignIn()
+  private async Task SignIn()
   {
-    //
-    bool success = AuthManager.Login(_loginModel);
-    //
-    // if (success) {
-    //   Navigation.NavigateTo("FetchData");
-    // }
-    // else
-    // {
-    //   Console.WriteLine("Login failed");
-    // }
+    
+    bool success = await AuthManager.LoginAsync(_loginRegisterModel);
+    
+    Console.WriteLine("Success: " + success);
+    
+    if (success)
+    {
+        Navigation.NavigateTo("/", forceLoad: true);
+    }
+    else
+    {
+      Console.WriteLine("Login failed");
+    }
   } 
 }

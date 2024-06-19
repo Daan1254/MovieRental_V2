@@ -1,35 +1,78 @@
+using System.Net.Http;
 using System.Net.Http.Json;
-using MovieRental_V2.Client.Pages;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.AspNetCore.Identity;
 using MovieRental_V2.Shared.Models;
 
-namespace MovieRental_V2.Client.Managers;
-
-public class AuthManager
+namespace MovieRental_V2.Client.Logic
 {
-    private readonly HttpClient _http = new HttpClient();
-    
-    public AuthManager()
+    public class AuthManager
     {
-        
-    }
+        private readonly HttpClient _httpClient = new();
 
-    private class LoginResult
-    {
-        public bool Successful { get; set; }
-    }
-    
-    public bool Login(LoginModel data)
-    {
-        HttpResponseMessage response = _http.PostAsJsonAsync("api/Authentication/Login", data).Result;
-        
-        if (response.IsSuccessStatusCode)
+        public async Task<bool> LoginAsync(LoginRegisterModel data)
         {
-            var result = response.Content.ReadFromJsonAsync<LoginResult>().Result;
-            if (result.Successful)
+
+            try
             {
-                return true;
+                HttpResponseMessage response = await _httpClient.PostAsJsonAsync("https://localhost:7032/api/Authentication/login", data);
+                Console.WriteLine(response.StatusCode);
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                    // var result = await response.Content.ReadFromJsonAsync<LoginResult>();
+                    // if (result.Successful)
+                    // {
+                    //     return true;
+                    // }
+                }
+            } 
+            catch (AccessTokenNotAvailableException ex)
+            {
+                ex.Redirect();
             }
+
+            return false;
         }
-        return false;
+        
+        public async Task<bool> SignOutAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.PostAsJsonAsync("https://localhost:7032/api/Authentication/logout", new {});
+
+                Console.WriteLine(response.StatusCode);
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+            } 
+            catch (AccessTokenNotAvailableException ex)
+            {
+                ex.Redirect();
+            }
+
+            return false;
+        }
+        
+        public async Task<bool> RegisterAsync(LoginRegisterModel data)
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.PostAsJsonAsync("https://localhost:7032/api/Authentication/register", data);
+                Console.WriteLine(response.StatusCode);
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+            } 
+            catch (AccessTokenNotAvailableException ex)
+            {
+                ex.Redirect();
+            }
+
+            return false;
+        }
     }
 }

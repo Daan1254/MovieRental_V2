@@ -1,8 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-
+@using MovieRental_V2.Client.Logic
+@inject AuthManager AuthManager
 @inject NavigationManager Navigation
-@inject SignOutSessionStateManager SignOutManager
 
 <AuthorizeView>
         <Authorized>
@@ -20,10 +20,15 @@
 </AuthorizeView>
 
 @code{
-    private async Task BeginSignOut(MouseEventArgs args)
+    
+    private async Task BeginSignOut()
     {
-        await SignOutManager.SetSignOutState();
-        Navigation.NavigateTo("authentication/logout");
+        bool success = await AuthManager.SignOutAsync();
+
+        if (success)
+        {
+            Navigation.NavigateTo("", forceLoad: true);
+        }
     }
 }
 

@@ -1,0 +1,40 @@
+﻿@page "/register"
+@using MovieRental_V2.Shared.Models
+@using MovieRental_V2.Client.Logic
+@inject NavigationManager Navigation
+@inject AuthManager AuthManager
+<PageTitle>Register</PageTitle>
+
+<div class="flex flex-col h-[80vh]">
+    <main class="flex-1 flex items-center justify-center px-4 md:px-6">
+        <div class="w-full max-w-md space-y-6">
+            <div class="space-y-2 text-center">
+                <h1 class="text-3xl font-bold">Create an account</h1>
+            </div>
+            <form class="space-y-4" @onsubmit="SignUp">
+                <div class="space-y-2">
+                    <label class="text-sm font-medium leading-none" for="email">Email</label>
+                    <input class="h-10 w-full rounded-md border px-3 py-2 text-sm" id="email" required type="email" @bind="_registerModel.Email" />
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm font-medium leading-none" for="password">Password</label>
+                    <input class="h-10 w-full rounded-md border px-3 py-2 text-sm" id="password" required type="password" @bind="_registerModel.Password" />
+                </div>
+                <button class="h-10 w-full bg-gray-900 text-white rounded-md" type="submit">Register</button>
+            </form>
+        </div>
+    </main>
+</div>
+
+@code {
+    private LoginRegisterModel _registerModel = new LoginRegisterModel();
+
+    private async Task SignUp()
+    {
+        bool success = await AuthManager.RegisterAsync(_registerModel);
+        if (success)
+        {
+            Navigation.NavigateTo("/");
+        }
+    }
+}

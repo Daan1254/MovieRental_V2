@@ -29,4 +29,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.30" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Shared\_LoginPartial.cshtml.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Error.cshtml" />
+  </ItemGroup>
+
 </Project>
