@@ -34,4 +34,8 @@
     <_ContentIncludedByDefault Remove="Pages\Error.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

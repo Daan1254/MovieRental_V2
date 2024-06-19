@@ -24,6 +24,11 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             
         // You can configure your model here if needed
         modelBuilder.Entity<Movie>().HasKey(m => m.Id);
+        
+        modelBuilder.Entity<Movie>()
+            .HasOne(m => m.Owner)
+            .WithMany(u => u.Movies)
+            .HasForeignKey(m => m.OwnerId);
     }
 }
 
