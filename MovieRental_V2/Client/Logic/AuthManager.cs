@@ -17,7 +17,7 @@ namespace MovieRental_V2.Client.Logic
             try
             {
                 HttpResponseMessage response = await _httpClient.PostAsJsonAsync("https://localhost:7032/api/Authentication/login", data);
-                Console.WriteLine(response.StatusCode);
+                
                 if (response.IsSuccessStatusCode)
                 {
                     return true;
@@ -37,7 +37,6 @@ namespace MovieRental_V2.Client.Logic
             {
                 HttpResponseMessage response = await _httpClient.PostAsJsonAsync("https://localhost:7032/api/Authentication/logout", new {});
 
-                Console.WriteLine(response.StatusCode);
                 if (response.IsSuccessStatusCode)
                 {
                     return true;
@@ -56,7 +55,7 @@ namespace MovieRental_V2.Client.Logic
             try
             {
                 HttpResponseMessage response = await _httpClient.PostAsJsonAsync("https://localhost:7032/api/Authentication/register", data);
-                Console.WriteLine(response.StatusCode);
+                
                 if (response.IsSuccessStatusCode)
                 {
                     return true;
