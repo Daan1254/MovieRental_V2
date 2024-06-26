@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MovieRental_V2.Client;
 using MovieRental_V2.Client.Logic;
+using MovieRental_V2.Shared.Logic;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -15,6 +16,8 @@ builder.Services.AddHttpClient("MovieRental_V2.ServerAPI", client => client.Base
 // Supply HttpClient instances that include access tokens when making requests to the server project
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("MovieRental_V2.ServerAPI"));
 builder.Services.AddScoped<AuthManager>();
+builder.Services.AddScoped<MovieManager>();
+builder.Services.AddScoped<GenreManager>();
 
 
 builder.Services.AddApiAuthorization(options =>

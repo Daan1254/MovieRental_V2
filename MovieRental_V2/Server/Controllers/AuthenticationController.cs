@@ -49,10 +49,10 @@ namespace MovieRental_V2.Server.Controllers
                 Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(user, data.Password, false, false);
                 if (result.Succeeded)
                 {
-                    return Ok(new LoginRegisterResult { Successful = true });
+                    return Ok(new LoginRegisterResultModel { Successful = true });
                 }
             }
-            return Ok(new LoginRegisterResult { Successful = false });
+            return Ok(new LoginRegisterResultModel { Successful = false });
         }
         
         [HttpPost("logout")]
@@ -71,12 +71,14 @@ namespace MovieRental_V2.Server.Controllers
                 UserName = data.Email,
                 Email = data.Email
             };
+            
             IdentityResult result = await _userManager.CreateAsync(user, data.Password);
+            
             if (result.Succeeded)
             {
-                return Ok(new LoginRegisterResult { Successful = true });
+                return Ok(new LoginRegisterResultModel { Successful = true });
             }
-            return Ok(new LoginRegisterResult { Successful = false });
+            return Ok(new LoginRegisterResultModel { Successful = false });
         }
     }
 }

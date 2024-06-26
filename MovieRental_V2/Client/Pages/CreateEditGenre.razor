@@ -1,0 +1,94 @@
+﻿@page "/genre/{Id:int}"
+@page "/genre"
+@using MovieRental_V2.Shared.Logic
+@using MovieRental_V2.Shared.Dtos
+@inject GenreManager GenreManager
+@inject NavigationManager Navigation
+@attribute [Authorize]
+<PageTitle>Create Genre</PageTitle>
+
+<div class="flex flex-col h-[80vh]">
+  <main  class="flex-1 flex items-center justify-center px-4 md:px-6">
+      <div class="w-full max-w-md space-y-6">
+        <div class="space-y-2 text-center">
+          <h1 class="text-3xl font-bold">
+            @if(!EditMode)
+            {
+              <span> Create Genre</span>
+            }
+            else
+            {
+              <span>Edit Genre</span>
+            }
+          </h1>
+          <p class="text-gray-500 dark:text-gray-400">Fill out the form to create or edit a genre</p>
+        </div>
+        <form @onsubmit="OnSubmit" class="space-y-4">
+          <div class="space-y-2">
+            <label
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              for="title"
+            >
+              Title
+            </label>
+            <input
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              id="title"
+              placeholder="Genre Title"
+              type="text"
+              @bind="CurrentGenre.Title"
+            />
+          </div>
+          <button
+            class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-gray-900 text-white hover:bg-gray-900/90 h-10 px-4 py-2 w-full"
+            type="submit"
+            >
+              @if (!EditMode)
+              {
+                <span>Create</span>
+              }
+              else
+              {
+                <span>Edit</span>
+              }
+              </button>
+        </form>
+      </div>
+    </main>
+</div>
+
+@code {
+  
+    private CreateEditGenreDto CurrentGenre = new CreateEditGenreDto();
+    
+    [Parameter] 
+    public int? Id { get; set; }
+
+    private bool EditMode { get; set; }
+
+    
+    protected override async Task OnInitializedAsync() 
+    {
+        Console.WriteLine(Id);
+        
+        if (Id != null)
+        {
+            CurrentGenre = await GenreManager.SetupCreateEditForm(Id ?? 1);
+            Console.WriteLine(CurrentGenre);
+        }
+        
+        EditMode = Id != null;
+    }
+    
+    
+    private async Task OnSubmit()
+    {
+       bool success = await GenreManager.HandleCreateEditForm(CurrentGenre, Id);
+
+       if (success)
+       {
+         Navigation.NavigateTo("/movies");
+       }
+       Console.WriteLine("Form submitted");
+    }
+}

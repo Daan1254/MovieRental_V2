@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieRental_V2.Server.Data;
 
@@ -10,9 +11,10 @@ using MovieRental_V2.Server.Data;
 namespace MovieRental_V2.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240624073505_made_user_nullable")]
+    partial class made_user_nullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.30");
@@ -354,36 +356,6 @@ namespace MovieRental_V2.Server.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("MovieRental_V2.Shared.Models.GenreModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Genres");
-                });
-
-            modelBuilder.Entity("MovieRental_V2.Shared.Models.MovieGenreModel", b =>
-                {
-                    b.Property<int>("MovieId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("GenreId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("MovieId", "GenreId");
-
-                    b.HasIndex("GenreId");
-
-                    b.ToTable("MovieGenres");
-                });
-
             modelBuilder.Entity("MovieRental_V2.Shared.Models.MovieModel", b =>
                 {
                     b.Property<int>("Id")
@@ -465,25 +437,6 @@ namespace MovieRental_V2.Server.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MovieRental_V2.Shared.Models.MovieGenreModel", b =>
-                {
-                    b.HasOne("MovieRental_V2.Shared.Models.GenreModel", "Genre")
-                        .WithMany("MovieGenres")
-                        .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MovieRental_V2.Shared.Models.MovieModel", "Movie")
-                        .WithMany("MovieGenres")
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Genre");
-
-                    b.Navigation("Movie");
-                });
-
             modelBuilder.Entity("MovieRental_V2.Shared.Models.MovieModel", b =>
                 {
                     b.HasOne("MovieRental_V2.Server.Models.ApplicationUser", "Owner")
@@ -496,16 +449,6 @@ namespace MovieRental_V2.Server.Data.Migrations
             modelBuilder.Entity("MovieRental_V2.Server.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Movies");
-                });
-
-            modelBuilder.Entity("MovieRental_V2.Shared.Models.GenreModel", b =>
-                {
-                    b.Navigation("MovieGenres");
-                });
-
-            modelBuilder.Entity("MovieRental_V2.Shared.Models.MovieModel", b =>
-                {
-                    b.Navigation("MovieGenres");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,6 @@
 namespace MovieRental_V2.Shared.Models;
 
-public class LoginRegisterResult
+public class LoginRegisterResultModel
 { 
     public bool Successful { get; set; }
 }

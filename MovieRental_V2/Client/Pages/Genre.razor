@@ -1,0 +1,80 @@
+﻿@page "/genres"
+@using MovieRental_V2.Shared.Dtos
+@using MovieRental_V2.Shared.Logic
+@inject NavigationManager Navigation
+@attribute [Authorize]
+@inject GenreManager GenreManager
+
+<PageTitle>Genres</PageTitle>
+
+
+
+@if (Genres == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="container mt-10">
+        <div class="flex flex-row justify-between items-center">
+            <div>
+                <h1>Genres</h1>
+            </div>
+            <button class="btn btn-info text-white" @onclick='() => Navigation.NavigateTo("/genre")'>Add Genre</button>
+        </div>
+       
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Title</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var genre in Genres)
+            {
+                <tr>
+                    <td>@genre.Title</td>
+                    <td>
+                        <button class="btn btn-info text-white" @onclick='() => { Navigation.NavigateTo($"/genre/{genre.Id}"); }'>Bewerken</button>
+                        <button class="btn btn-danger" @onclick="() => { DeleteGenre(genre.Id); }">Verwijderen</button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<GenreDto>? Genres;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadGenres();
+
+        foreach (var genre in Genres)
+        {
+            Console.WriteLine(genre);
+        }
+    }
+    
+    
+    private async Task LoadGenres()
+    {
+        Genres = await GenreManager.GetGenresAsync();
+    }
+    
+    
+   
+    
+    private async Task DeleteGenre(int movieId)
+    {
+        bool success = await GenreManager.DeleteGenreAsync(movieId);
+
+        if (success)
+        {
+            Navigation.NavigateTo("/genres", forceLoad: true);
+        }
+    }
+}
+

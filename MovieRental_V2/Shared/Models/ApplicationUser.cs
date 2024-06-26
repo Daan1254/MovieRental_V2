@@ -7,7 +7,6 @@ namespace MovieRental_V2.Server.Models;
 
 public class ApplicationUser : IdentityUser
 {
-    public ICollection<Movie> Movies { get; set; }
+    public ICollection<MovieModel> Movies { get; set; }
 }
 
-    

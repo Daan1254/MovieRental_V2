@@ -4,7 +4,7 @@ using MovieRental_V2.Server.Models;
 
 namespace MovieRental_V2.Shared.Models
 {
-    public class Movie
+    public class MovieModel
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -13,9 +13,12 @@ namespace MovieRental_V2.Shared.Models
         public DateTime ReleaseDate { get; set; }
         
         // Foreign Key
-        public string OwnerId { get; set; }
+        public string? OwnerId { get; set; }
 
         // Navigation Property
-        public ApplicationUser Owner { get; set; }
+        public ApplicationUser? Owner { get; set; }
+        
+        public ICollection<MovieGenreModel> MovieGenres { get; set; }
+
     }
 }
