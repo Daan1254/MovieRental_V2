@@ -1,25 +1,34 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-
+@using MovieRental_V2.Client.Logic
+@inject AuthManager AuthManager
 @inject NavigationManager Navigation
-@inject SignOutSessionStateManager SignOutManager
 
 <AuthorizeView>
-    <Authorized>
-        <a href="authentication/profile">Hello, @context.User.Identity?.Name!</a>
-        <button class="nav-link btn btn-link" @onclick="BeginSignOut">Log out</button>
-    </Authorized>
-    <NotAuthorized>
-        <a href="authentication/register">Register</a>
-        <a href="authentication/login">Log in</a>
-    </NotAuthorized>
+        <Authorized>
+             <div class="h-[80vh] w-full flex items-center justify-center flex-col gap-2">
+                <a href="/profile">Hello, @context.User.Identity?.Name!</a>
+                <button class="nav-link btn btn-link" @onclick="BeginSignOut">Log out</button>
+             </div>
+        </Authorized>
+        <NotAuthorized>
+            <div class="h-[80vh] w-full flex items-center justify-center flex-col gap-2">
+                <a href="/register">Register</a>
+                <a href="/login">Log in</a>
+            </div>
+        </NotAuthorized>
 </AuthorizeView>
 
 @code{
-    private async Task BeginSignOut(MouseEventArgs args)
+    
+    private async Task BeginSignOut()
     {
-        await SignOutManager.SetSignOutState();
-        Navigation.NavigateTo("authentication/logout");
+        bool success = await AuthManager.SignOutAsync();
+
+        if (success)
+        {
+            Navigation.NavigateTo("", forceLoad: true);
+        }
     }
 }
 
