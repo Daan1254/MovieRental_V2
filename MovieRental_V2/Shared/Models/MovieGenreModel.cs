@@ -14,21 +14,4 @@ public class MovieGenreModel
         this.MovieId = movieId;
         this.GenreId = genreId;
     }
-    
-    public void SetMovie(MovieModel movie)
-    {
-        if (movie != null)
-        {
-            this.Movie = movie;
-        }
-    }
-    
-    public void SetGenre(GenreModel genre)
-    {
-        if (genre != null)
-        {
-            this.Genre = genre;
-        }
-    }
-
 }

@@ -30,21 +30,20 @@ public class GenreManager
     }
 
 
-    public async Task<CreateEditGenreDto> SetupCreateEditForm(int? GerneId)
+    public async Task<CreateEditGenreDto> SetupCreateEditForm(int GerneId)
     {
-        GenreDto? genre =  await GetGenreAsync(GerneId ?? 1);
+        GenreDto? genre =  await GetGenreAsync(GerneId);
 
-        if (genre != null)
+        return new CreateEditGenreDto
         {
-            return new CreateEditGenreDto
-            {
-                Title = genre.Title
-            };
-        }
-        else
-        {
-            return new CreateEditGenreDto();
-        }
+            Title = genre.Title
+        };
+    }
+    
+    public async Task<CreateEditGenreDto> SetupCreateEditForm()
+    {
+        
+        return new CreateEditGenreDto();
     }
     
     

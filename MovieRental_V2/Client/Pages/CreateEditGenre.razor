@@ -69,15 +69,16 @@
     
     protected override async Task OnInitializedAsync() 
     {
-        Console.WriteLine(Id);
-        
-        if (Id != null)
-        {
-            CurrentGenre = await GenreManager.SetupCreateEditForm(Id ?? 1);
-            Console.WriteLine(CurrentGenre);
-        }
-        
         EditMode = Id != null;
+
+        if (EditMode)
+        {
+            CurrentGenre = await GenreManager.SetupCreateEditForm((int)Id);
+        }
+        else
+        {
+          CurrentGenre = await GenreManager.SetupCreateEditForm();
+        }
     }
     
     
@@ -87,7 +88,7 @@
 
        if (success)
        {
-         Navigation.NavigateTo("/movies");
+         Navigation.NavigateTo("/genres");
        }
        Console.WriteLine("Form submitted");
     }

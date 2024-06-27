@@ -36,9 +36,9 @@ public class MovieController : ControllerBase
     
     
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetMovie(int id)
+    public async Task<IActionResult> GetMovie([FromRoute] int id)
     {
-        MovieDto? movie = await _movieService.GetMovie();
+        MovieDto? movie = await _movieService.GetMovie(id);
         
         if (movie == null)
         {
@@ -56,7 +56,7 @@ public class MovieController : ControllerBase
         {
             
             Title = movieModel.Title,
-            Available = true,
+            State = MovieState.AVAILABLE,
             Director = movieModel.Director,
             ReleaseDate = DateTime.Now
         });
@@ -112,7 +112,7 @@ public class MovieController : ControllerBase
             return NotFound();
         }
         
-        movie.Available = false;
+        movie.State = MovieState.RENTED;
         
         Claim? claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
         
@@ -122,6 +122,24 @@ public class MovieController : ControllerBase
         }
         
         movie.OwnerId = claim.Value;
+        
+        await _context.SaveChangesAsync();
+        
+        return NoContent();
+    }
+    
+    [HttpPut("{id}/return")]
+    public async Task<IActionResult> ReturnMovie(int id)
+    {
+        MovieModel? movie = await _context.Movies.FindAsync(id);
+        
+        if (movie == null)
+        {
+            return NotFound();
+        }
+        
+        movie.State = MovieState.AVAILABLE;
+        movie.OwnerId = null;
         
         await _context.SaveChangesAsync();
         

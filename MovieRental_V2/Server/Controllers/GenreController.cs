@@ -32,9 +32,9 @@ public class GenreController : ControllerBase
     }
     
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetGenre(int id)
+    public async Task<IActionResult> GetGenre([FromRoute] int id)
     {
-        GenreDto? genre = await _genreService.GetGenre();
+        GenreDto? genre = await _genreService.GetGenre(id);
         
         if (genre == null)
         {
@@ -47,7 +47,10 @@ public class GenreController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateGenre([FromBody] CreateEditGenreDto createEditGenreDto)
     {
-        _context.Genres.Add(new GenreModel(createEditGenreDto.Title));
+        _context.Genres.Add(new GenreModel()
+        {
+            Title = createEditGenreDto.Title!
+        });
         
         await _context.SaveChangesAsync();
 
@@ -64,7 +67,7 @@ public class GenreController : ControllerBase
             return NotFound();
         }
 
-        genre.SetTitle(createEditGenreDto.Title!);
+        genre.Title = createEditGenreDto.Title!;
             
         await _context.SaveChangesAsync();
 
@@ -79,6 +82,13 @@ public class GenreController : ControllerBase
         if (genre == null)
         {
             return NotFound();
+        }
+
+        bool isLinked = genre.IsGenreLinkedToMovie();
+
+        if (isLinked)
+        {
+            BadRequest();
         }
 
         _context.Genres.Remove(genre);

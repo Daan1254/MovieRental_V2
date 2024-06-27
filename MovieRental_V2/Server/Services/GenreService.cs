@@ -18,19 +18,20 @@ public class GenreService
     
     public async Task<List<GenreDto>> GetGernes()
     {
-        List<GenreDto> movies = await _context.Genres
+        List<GenreDto> genres = await _context.Genres
             .Select(g => new GenreDto(g.Id, g.Title))
             .ToListAsync();
 
-        return movies;  
+        return genres;  
     }
 
-    public async Task<GenreDto?> GetGenre()
+    public async Task<GenreDto?> GetGenre(int Id)
     {
-        GenreDto? movie = await _context.Genres
+        GenreDto? genre = await _context.Genres
+            .Where(g => g.Id == Id)
             .Select(g => new GenreDto(g.Id, g.Title))
             .FirstOrDefaultAsync();
         
-        return movie;
+        return genre;
     }
 }
